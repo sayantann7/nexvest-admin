@@ -29,8 +29,8 @@ export default function ChangePasswordPage(){
 
   return (
     <AdminLayout title="Change Password">
-      <form onSubmit={handleSubmit} className="space-y-10 max-w-xl">
-        <section className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-8 shadow-xl space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-8 md:space-y-10 max-w-xl px-2 sm:px-0">
+        <section className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-xl space-y-6">
           <div>
             <h2 className="text-lg font-semibold">Update Credentials</h2>
             <p className="text-sm text-white/50">Ensure your new password is at least 8 characters and unique.</p>

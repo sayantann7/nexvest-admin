@@ -28,8 +28,8 @@ export default function RootDashboard(){
   }
 
   return (
-    <AdminLayout title="Dashboard" actions={<Link href="/articles/new" className="bg-[#0AFFFF] text-[#0D0C34] font-medium px-5 py-2.5 rounded-md hover:bg-[#08e6d9] shadow">New Article</Link>}>
-      <section className="grid gap-6 md:grid-cols-3">
+    <AdminLayout title="Dashboard" actions={<Link href="/articles/new" className="bg-[#0AFFFF] text-[#0D0C34] font-medium px-4 py-2.5 rounded-md hover:bg-[#08e6d9] shadow text-sm md:text-base">New Article</Link>}>
+      <section className="grid gap-4 md:gap-6 sm:grid-cols-2 xl:grid-cols-3">
         <div className="rounded-xl border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.02] p-6 shadow-lg">
           <h3 className="text-sm font-medium text-white/60">Total Articles</h3>
           <p className="text-4xl font-semibold mt-3 tracking-tight">{loading ? '—' : total}</p>

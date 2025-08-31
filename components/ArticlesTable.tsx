@@ -45,10 +45,10 @@ export default function ArticlesTable() {
   if (error) return <div className="p-8 text-red-400">{error}</div>;
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Articles</h2>
-        <Link href="/articles/new" className="bg-[#0AFFFF] text-[#0D0C34] px-4 py-2 rounded-md font-medium hover:bg-[#08e6d9]">New Article</Link>
+    <div className="p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-white">Articles</h2>
+        <Link href="/articles/new" className="self-start sm:self-auto bg-[#0AFFFF] text-[#0D0C34] px-4 py-2 rounded-md font-medium hover:bg-[#08e6d9] text-sm md:text-base">New Article</Link>
       </div>
       <div className="overflow-x-auto bg-white/5 border border-white/10 rounded-xl">
         <table className="w-full text-sm">

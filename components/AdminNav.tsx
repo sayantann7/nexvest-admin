@@ -22,7 +22,9 @@ const navGroups = [
   }
 ];
 
-export default function AdminNav() {
+interface AdminNavProps { onNavigate?: () => void; mobile?: boolean; }
+
+export default function AdminNav({ onNavigate, mobile = false }: AdminNavProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -30,12 +32,14 @@ export default function AdminNav() {
   if(!mounted) return null;
   const token = getToken();
   return (
-    <aside className="w-68 bg-[#0D0C34] border-r border-white/10 text-white min-h-screen flex flex-col">
-      <div className="px-6 pt-6 pb-5 border-b border-white/10">
-        <div className="text-xl font-bold tracking-tight">NexVest <span className="text-[#0AFFFF]">Admin</span></div>
-        <p className="text-[10px] mt-1 uppercase tracking-wider text-white/40">Control Center</p>
-      </div>
-      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-8">
+    <aside className={`w-68 bg-[#0D0C34] border-r border-white/10 text-white flex flex-col ${mobile ? 'h-full overflow-y-auto' : 'min-h-screen'}`}>
+      {!mobile && (
+        <div className="px-6 pt-6 pb-5 border-b border-white/10">
+          <div className="text-xl font-bold tracking-tight">NexVest <span className="text-[#0AFFFF]">Admin</span></div>
+          <p className="text-[10px] mt-1 uppercase tracking-wider text-white/40">Control Center</p>
+        </div>
+      )}
+      <nav className={`flex-1 px-4 py-6 space-y-8 ${!mobile ? 'overflow-y-auto' : ''}`}>
         {navGroups.map(group => (
           <div key={group.title} className="space-y-3">
             <p className="text-[11px] uppercase tracking-wider text-white/40 px-2 font-semibold">{group.title}</p>
@@ -45,7 +49,7 @@ export default function AdminNav() {
                 const Icon = item.icon;
                 return (
                   <li key={item.href}>
-                    <Link href={item.href} className={`group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium relative ${active ? 'bg-white text-[#0D0C34]' : 'text-white/70 hover:bg-white/10 hover:text-white'} transition-colors`}> 
+                    <Link href={item.href} onClick={()=>{ if(onNavigate) onNavigate(); }} className={`group flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium relative ${active ? 'bg-white text-[#0D0C34]' : 'text-white/70 hover:bg-white/10 hover:text-white'} transition-colors`}> 
                       <Icon className={`h-4 w-4 ${active ? 'text-[#0D0C34]' : 'text-[#0AFFFF] group-hover:text-[#0AFFFF]'}`} />
                       <span className="truncate">{item.label}</span>
                       {active && <span className="absolute inset-y-0 left-0 w-1 bg-[#0AFFFF] rounded-r-sm" />}
@@ -57,12 +61,12 @@ export default function AdminNav() {
           </div>
         ))}
       </nav>
-      <div className="p-4 border-t border-white/10">
+  <div className={`p-4 border-t border-white/10 ${mobile ? 'sticky bottom-0 bg-[#0D0C34]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0D0C34]/80' : ''}` }>
         {token && (
-          <button onClick={()=>{clearToken(); router.push('/login')}} className="w-full bg-white/10 hover:bg-white/20 text-xs font-medium rounded-md px-3 py-2 tracking-wide">Logout</button>
+          <button onClick={()=>{clearToken(); router.push('/login'); if(onNavigate) onNavigate(); }} className="w-full bg-white/10 hover:bg-white/20 text-xs font-medium rounded-md px-3 py-2 tracking-wide">Logout</button>
         )}
         {!token && (
-          <button onClick={()=>router.push('/login')} className="w-full bg-[#0AFFFF] text-[#0D0C34] text-xs font-semibold rounded-md px-3 py-2 tracking-wide">Login</button>
+          <button onClick={()=>{router.push('/login'); if(onNavigate) onNavigate(); }} className="w-full bg-[#0AFFFF] text-[#0D0C34] text-xs font-semibold rounded-md px-3 py-2 tracking-wide">Login</button>
         )}
       </div>
     </aside>

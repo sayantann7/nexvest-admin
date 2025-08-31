@@ -29,8 +29,8 @@ export default function NewArticlePage(){
 
   return (
     <AdminLayout title="Create New Article">
-      <form onSubmit={handleSubmit} className="space-y-10 max-w-4xl">
-        <section className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-8 shadow-xl space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-8 md:space-y-10 max-w-4xl px-2 sm:px-0">
+        <section className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-xl space-y-6 md:space-y-8">
           <div>
             <h2 className="text-xl font-semibold mb-1">Primary Details</h2>
             <p className="text-sm text-white/50">Give your research article a concise, descriptive title and write the main content below.</p>

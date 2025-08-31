@@ -43,8 +43,8 @@ export default function EditArticlePage(){
 
   return (
     <AdminLayout title="Edit Article">
-      <div className="space-y-10 max-w-4xl">
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-8 shadow-xl space-y-8">
+      <div className="space-y-8 md:space-y-10 max-w-4xl px-2 sm:px-0">
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 md:p-8 shadow-xl space-y-6 md:space-y-8">
           <div className="space-y-2">
             <label className="text-sm font-semibold">Title</label>
             <input value={title} onChange={e=>setTitle(e.target.value)} className="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0AFFFF]" />
