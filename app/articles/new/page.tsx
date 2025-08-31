@@ -1,7 +1,8 @@
 "use client";
 import { createArticle, getToken } from '@/lib/api';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState, ChangeEvent } from 'react';
+import Image from 'next/image';
 import AdminLayout from '../../../components/AdminLayout';
 
 export default function NewArticlePage(){
@@ -23,7 +24,7 @@ export default function NewArticlePage(){
       if(!token) throw new Error('Not authenticated');
   await createArticle(token, { title, content, thumbnailFile, link: link || undefined });
       router.push('/articles');
-    } catch (e:any) { setError(e.message); } finally { setLoading(false); }
+  } catch (e) { const err = e as Error; setError(err.message); } finally { setLoading(false); }
   };
 
   return (
@@ -50,8 +51,8 @@ export default function NewArticlePage(){
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-semibold">Thumbnail Image</label>
-              <input type="file" accept="image/*" onChange={e=> setThumbnailFile(e.target.files?.[0] || null)} className="block text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-[#0AFFFF] file:text-[#0D0C34] hover:file:bg-[#08e6d9]" required />
-              {thumbnailFile && <div className="mt-3 flex items-start gap-4"><img src={URL.createObjectURL(thumbnailFile)} alt="preview" className="h-40 w-64 object-cover rounded-lg border border-white/10 shadow" /><div className="text-xs text-white/50 leading-relaxed max-w-sm">Preview of the selected thumbnail. Choose a visually clear image that represents the report’s focus.</div></div>}
+              <input type="file" accept="image/*" onChange={(e: ChangeEvent<HTMLInputElement>)=> setThumbnailFile(e.target.files?.[0] || null)} className="block text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-[#0AFFFF] file:text-[#0D0C34] hover:file:bg-[#08e6d9]" required />
+              {thumbnailFile && <div className="mt-3 flex items-start gap-4">{/* eslint-disable-next-line @next/next/no-img-element */}<img src={URL.createObjectURL(thumbnailFile)} alt="preview" className="h-40 w-64 object-cover rounded-lg border border-white/10 shadow" /><div className="text-xs text-white/50 leading-relaxed max-w-sm">Preview of the selected thumbnail. Choose a visually clear image that represents the report’s focus.</div></div>}
             </div>
           </div>
         </section>

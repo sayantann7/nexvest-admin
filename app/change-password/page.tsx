@@ -24,7 +24,7 @@ export default function ChangePasswordPage(){
       await changePassword(token, currentPassword, newPassword);
       setMessage('Password changed successfully');
       setCurrentPassword(''); setNewPassword(''); setConfirmPassword('');
-    } catch(e:any){ setError(e.message || 'Failed to change password'); } finally { setLoading(false); }
+  } catch(e){ const err = e as Error; setError(err.message || 'Failed to change password'); } finally { setLoading(false); }
   };
 
   return (

@@ -19,8 +19,9 @@ export default function LoginPage() {
       const res = await signin(username, password);
       setToken(res.token);
       router.push('/articles');
-    } catch (err:any) {
-      setError(err.message || 'Login failed');
+    } catch (err) {
+      const e = err as Error;
+      setError(e.message || 'Login failed');
     } finally {
       setLoading(false);
     }

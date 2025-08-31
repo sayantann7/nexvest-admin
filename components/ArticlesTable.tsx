@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { Article, deleteArticle, getArticle, getToken, listArticles } from '@/lib/api';
+import { Article, deleteArticle, getToken, listArticles } from '@/lib/api';
 import Link from 'next/link';
 
 export default function ArticlesTable() {
@@ -15,8 +15,9 @@ export default function ArticlesTable() {
     try {
       const data = await listArticles();
       setArticles(data.sort((a,b)=> new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
-    } catch (e:any) {
-      setError(e.message);
+    } catch (e) {
+      const err = e as Error;
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -32,8 +33,9 @@ export default function ArticlesTable() {
     try {
       await deleteArticle(token, id);
       setArticles(prev => prev.filter(a=>a.id!==id));
-    } catch (e:any) {
-      alert(e.message || 'Delete failed');
+    } catch (e) {
+      const err = e as Error;
+      alert(err.message || 'Delete failed');
     } finally {
       setDeletingId(null);
     }
@@ -64,6 +66,7 @@ export default function ArticlesTable() {
                 <td className="p-3 text-white max-w-[340px] truncate" title={a.title}>{a.title}</td>
                 <td className="p-3 text-white/70 whitespace-nowrap">{new Date(a.createdAt).toLocaleString()}</td>
                 <td className="p-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={a.thumbnail} alt="thumb" className="h-10 w-16 object-cover rounded-md border border-white/10" />
                 </td>
                 <td className="p-3 text-right space-x-2 whitespace-nowrap">

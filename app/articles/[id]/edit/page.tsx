@@ -1,7 +1,8 @@
 "use client";
 import { getArticle, getToken, updateArticle } from '@/lib/api';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
+import Image from 'next/image';
 import AdminLayout from '../../../../components/AdminLayout';
 
 export default function EditArticlePage(){
@@ -21,7 +22,10 @@ export default function EditArticlePage(){
     try {
       const a = await getArticle(id);
   setTitle(a.title); setContent(a.content); setThumbnail(a.thumbnail); setLink(a.link || '');
-    } catch(e:any){ setError(e.message);} finally { setLoading(false);} })(); },[id]);
+    } catch(e){
+      const err = e as Error;
+      setError(err.message);
+    } finally { setLoading(false);} })(); },[id]);
 
   const handleSave = async () => {
     setSaving(true); setError(null);
@@ -29,7 +33,10 @@ export default function EditArticlePage(){
       const token = getToken(); if(!token) throw new Error('Not authenticated');
   await updateArticle(token, id, { title, content, thumbnail: newThumbnailFile ? undefined : thumbnail, thumbnailFile: newThumbnailFile || undefined, link: link || undefined });
       router.push('/articles');
-    } catch(e:any){ setError(e.message);} finally { setSaving(false);} }
+    } catch(e){
+      const err = e as Error;
+      setError(err.message);
+    } finally { setSaving(false);} }
 
   if(loading) return <AdminLayout title="Edit Article"><div className="text-white/60">Loading...</div></AdminLayout>;
   if(error) return <AdminLayout title="Edit Article"><div className="text-red-400">{error}</div></AdminLayout>;
@@ -54,6 +61,8 @@ export default function EditArticlePage(){
             <div className="space-y-2">
               <label className="text-sm font-semibold">Current Thumbnail URL</label>
               <input value={thumbnail} onChange={e=>setThumbnail(e.target.value)} className="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0AFFFF]" />
+              {/* Using native img for already-optimized remote URL to avoid layout shift */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={thumbnail} alt="current thumbnail" className="h-40 object-cover rounded-md border border-white/10 mt-2" />
             </div>
             <div className="space-y-2">
@@ -61,7 +70,7 @@ export default function EditArticlePage(){
               <input
                 type="file"
                 accept="image/*"
-                onChange={e=>{
+                onChange={(e: ChangeEvent<HTMLInputElement>)=>{
                   const file = e.target.files?.[0] || null;
                   setNewThumbnailFile(file);
                   if(file){
@@ -76,6 +85,8 @@ export default function EditArticlePage(){
               {previewUrl && (
                 <div>
                   <p className="text-xs text-white/60 mb-1">New Preview:</p>
+                  {/* Preview is a blob URL; next/image not needed */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={previewUrl} alt="new thumbnail preview" className="h-40 object-cover rounded-md border border-white/10" />
                 </div>
               )}
