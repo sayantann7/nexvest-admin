@@ -1,16 +1,31 @@
 "use client";
 import AdminLayout from '../components/AdminLayout';
 import { useEffect, useState } from 'react';
-import { Article, listArticles } from '@/lib/api';
+import { Article, listArticles, getToken } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function RootDashboard(){
+  const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(()=>{ (async()=>{ try { const data = await listArticles(); setArticles(data.slice().sort((a,b)=> new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())); } finally { setLoading(false);} })(); },[]);
+  const [authChecked, setAuthChecked] = useState(false);
+  useEffect(()=>{
+    const token = getToken();
+    if(!token){
+      router.replace('/login');
+      return; // don't proceed to fetch
+    }
+    setAuthChecked(true);
+    (async()=>{ try { const data = await listArticles(); setArticles(data.slice().sort((a,b)=> new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())); } finally { setLoading(false);} })();
+  },[router]);
 
   const total = articles.length;
   const latest = articles.slice(0,5);
+
+  if(!authChecked) {
+    return <div className="min-h-screen flex items-center justify-center bg-[#07061C] text-white/60">Redirecting...</div>;
+  }
 
   return (
     <AdminLayout title="Dashboard" actions={<Link href="/articles/new" className="bg-[#0AFFFF] text-[#0D0C34] font-medium px-5 py-2.5 rounded-md hover:bg-[#08e6d9] shadow">New Article</Link>}>
