@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { listUsers, UserRecord, getToken } from '../../lib/api';
 import AdminLayout from '../../components/AdminLayout';
 import { useRouter } from 'next/navigation';
@@ -22,8 +21,9 @@ export default function UsersPage() {
       try {
         const data = await listUsers();
         setUsers(data);
-      } catch (e: any) {
-        setError(e.message || 'Failed to load users');
+      } catch (e: unknown) {
+        if (e instanceof Error) setError(e.message);
+        else setError('Failed to load users');
       } finally {
         setLoading(false);
       }

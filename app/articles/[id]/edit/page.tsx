@@ -2,7 +2,6 @@
 import { getArticle, getToken, updateArticle } from '@/lib/api';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState, ChangeEvent } from 'react';
-import Image from 'next/image';
 import AdminLayout from '../../../../components/AdminLayout';
 
 export default function EditArticlePage(){

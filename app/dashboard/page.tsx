@@ -3,6 +3,7 @@ import AdminLayout from '../../components/AdminLayout';
 import { useEffect, useState } from 'react';
 import { Article, listArticles } from '@/lib/api';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function DashboardPage(){
   const [articles, setArticles] = useState<Article[]>([]);
@@ -56,7 +57,11 @@ export default function DashboardPage(){
                 <tr key={a.id} className="border-t border-white/10 hover:bg-white/5">
                   <td className="px-5 py-3 font-medium text-white truncate max-w-[420px]" title={a.title}><Link href={`/articles/${a.id}/edit`} className="hover:underline">{a.title}</Link></td>
                   <td className="px-5 py-3 text-white/60 whitespace-nowrap">{new Date(a.createdAt).toLocaleString()}</td>
-                  <td className="px-5 py-3"><img src={a.thumbnail} className="h-12 w-20 object-cover rounded-md border border-white/10" alt="thumb" /></td>
+                  <td className="px-5 py-3">
+                    <div className="h-12 w-20 relative">
+                      <Image src={a.thumbnail} alt="thumb" fill sizes="80px" className="object-cover rounded-md border border-white/10" />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
