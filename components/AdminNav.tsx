@@ -10,7 +10,8 @@ const navGroups = [
     title: 'Content',
     items: [
   { href: '/', label: 'Dashboard', icon: LayoutGrid },
-      { href: '/articles', label: 'Articles', icon: FileText },
+  { href: '/articles', label: 'Articles', icon: FileText },
+  { href: '/users', label: 'Users', icon: LayoutGrid },
       { href: '/articles/new', label: 'New Article', icon: PlusCircle }
     ]
   },

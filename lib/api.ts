@@ -14,6 +14,14 @@ export interface Article {
   link?: string;
 }
 
+export interface UserRecord {
+  id: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  createdAt: string;
+}
+
 export interface SigninResponse {
   message: string;
   token: string;
@@ -107,6 +115,12 @@ export async function deleteArticle(token: string, id: string): Promise<void> {
     try { const t = await res.text(); if (t) msg += `: ${t}`; } catch {}
     throw new Error(msg);
   }
+}
+
+export async function listUsers(): Promise<UserRecord[]> {
+  const res = await fetch(`${API_BASE}/user`, { cache: 'no-store' });
+  if (!res.ok) throw new Error('Failed to fetch users');
+  return res.json();
 }
 
 export function getToken(): string | null {

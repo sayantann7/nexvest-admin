@@ -1,13 +1,14 @@
 "use client";
 import AdminLayout from '../components/AdminLayout';
 import { useEffect, useState } from 'react';
-import { Article, listArticles, getToken } from '@/lib/api';
+import { Article, listArticles, getToken, listUsers, UserRecord } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function RootDashboard(){
   const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
+  const [users, setUsers] = useState<UserRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [authChecked, setAuthChecked] = useState(false);
   useEffect(()=>{
@@ -17,11 +18,21 @@ export default function RootDashboard(){
       return; // don't proceed to fetch
     }
     setAuthChecked(true);
-    (async()=>{ try { const data = await listArticles(); setArticles(data.slice().sort((a,b)=> new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())); } finally { setLoading(false);} })();
+    (async()=>{ 
+      try { 
+        const [articleData, userData] = await Promise.all([
+          listArticles(),
+          listUsers().catch(()=>[] as UserRecord[])
+        ]);
+        setArticles(articleData.slice().sort((a,b)=> new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())); 
+        setUsers(userData);
+      } finally { setLoading(false);} 
+    })();
   },[router]);
 
   const total = articles.length;
   const latest = articles.slice(0,5);
+  const userCount = users.length;
 
   if(!authChecked) {
     return <div className="min-h-screen flex items-center justify-center bg-[#07061C] text-white/60">Redirecting...</div>;
@@ -41,9 +52,9 @@ export default function RootDashboard(){
           <p className="text-[11px] text-white/40 mt-2 uppercase">Updated recently</p>
         </div>
         <div className="rounded-xl border border-white/10 bg-gradient-to-br from-white/10 to-white/[0.02] p-6 shadow-lg">
-          <h3 className="text-sm font-medium text-white/60">Storage</h3>
-          <p className="text-4xl font-semibold mt-3 tracking-tight">∞</p>
-          <p className="text-[11px] text-white/40 mt-2 uppercase">S3 backed assets</p>
+          <h3 className="text-sm font-medium text-white/60">Users</h3>
+          <p className="text-4xl font-semibold mt-3 tracking-tight">{loading ? '—' : userCount}</p>
+          <p className="text-[11px] text-white/40 mt-2 uppercase">Registered leads</p>
         </div>
       </section>
       <section className="space-y-6">
